@@ -1,4 +1,5 @@
 from flashcard import add_card, make_card, write_deck, read_deck
+import sys
 
 # main loop:
 # Given a deck, print each card, in order
@@ -45,19 +46,26 @@ def add_cards(deck):
 
 
 if __name__ == '__main__':
-    handle = input("Enter file to read deck:")
+    if len(sys.argv) > 2:
+        mode, handle = sys.argv[1], sys.argv[2]
+    elif len(sys.argv) == 2:
+        mode = '-r'
+        handle = sys.argv[1]
+    else:
+        print("argument missing: file name")
+        sys.exit(1)
 
     # TODO: exception handling
     deck = read_deck(handle)
-
-    print("Select an option:")
-    mode = input("A to add cards, R to review deck")
     
-    if mode == 'A':
+    if mode == '-a':
         add_cards(deck)
         save = input("Save file: ")
         if save == 'y':
             handle = input("File name: ")
             write_deck(deck, handle)
-    elif mode == 'R':
+    elif mode == '-r':
         review_deck(deck)
+    else:
+        print("command line argument", mode, "not recognised")
+        sys.exit(0)
