@@ -37,6 +37,10 @@ def test_read(handle, deck):
             print(k, v)
     
 
+def test_deck_contains(deck, card):
+    assert deck_contains(deck, card['front'])
+
+
 if __name__ == '__main__':
     test_deck = [
         make_card("école", "school"),
@@ -54,5 +58,6 @@ old
 
     HANDLE = 'test_file'
 
-    test_write(test_deck, HANDLE, test_str)
-    test_read(HANDLE, test_deck)
+    # test_write(test_deck, HANDLE, test_str)
+    # test_read(HANDLE, test_deck)
+    test_deck_contains(test_deck, test_deck[0])

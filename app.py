@@ -1,4 +1,4 @@
-from flashcard import add_card, make_card, write_deck, read_deck
+from flashcard import add_card, deck_contains, make_card, write_deck, read_deck
 import sys
 
 # main loop:
@@ -45,6 +45,39 @@ def add_cards(deck):
             break
 
 
+def show_deck(deck):
+    for card in deck:
+        print(f"{card['front']}: {card['back']}")
+
+
+def edit_deck(deck, handle):
+    """
+    Show all cards, prompt user to identify card to edit with front of card.
+    """
+
+    show_deck(deck)
+
+    while True:
+        front = input("Enter the front of the card to be edited: ")
+
+        # find card with front and its index
+        for index, card in enumerate(deck):
+            if card['front'] == front:
+                break
+        else:
+            print(f"No card with front value {front} in deck")
+            break
+
+        front = input('Front: ')
+        back = input('Back: ')
+        deck[index] = make_card(front, back)
+
+        resp = input("Continue: ")
+        if resp != 'y':
+            break
+
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 2:
         mode, handle = sys.argv[1], sys.argv[2]
@@ -60,12 +93,19 @@ if __name__ == '__main__':
     
     if mode == '-a':
         add_cards(deck)
-        save = input("Save file: ")
+        save = input("Save changes: ")
         if save == 'y':
-            handle = input("File name: ")
+            # handle = input("File name: ")
             write_deck(deck, handle)
     elif mode == '-r':
         review_deck(deck)
+    elif mode == '-v':
+        show_deck(deck)
+    elif mode == '-e':
+        edit_deck(deck, handle)
+        save = input("Save changes: ")
+        if save == 'y':
+            write_deck(deck, handle)
     else:
         print("command line argument", mode, "not recognised")
         sys.exit(0)

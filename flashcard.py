@@ -14,13 +14,20 @@ def make_card(front, back):
 
 # A deck is represented as a list of flashcards
 
+def deck_contains(deck, front):
+    """
+    Checks if the deck contains a card with the given front text.
+    """
+    return front in [k['front'] for k in deck]
+    
+
 def add_card(deck, card):
     """
     Adds a card to a deck. Raises an error if the front of the card is already
     in the deck.
     """
 
-    if card['front'] in [k for k in deck]:
+    if deck_contains(deck, card['front']):
         raise ValueError(f"Card with front {card['front']} already in deck")
     else:
         deck.append(card)
