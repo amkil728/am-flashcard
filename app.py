@@ -88,7 +88,6 @@ def edit_deck(deck, handle):
 if __name__ == '__main__':
     handle = input("Name of deck file: ")
     
-    # TODO: exception handling
     try:
         deck = read_deck(handle)
     except FileNotFoundError:
@@ -96,32 +95,53 @@ if __name__ == '__main__':
     except UnicodeDecodeError:
         print(f"Could not read {handle}. Please enter a plaintext file")
 
-
     print("Select an option:")
     print("1. Add cards to deck.")
     print("2. Edit deck.")
     print("3. Study deck.")
     print("4. Revise deck.")
 
-    while True:
-        resp = input()
-        if resp in [1,2,3,4]:
-            break
+    options = ['1','2','3','4']
+
+    resp = None
+    
+    while resp is None:
+        input_value = input()
+        if input_value in options:
+            resp = input_value
         else:
             print("Please select a valid option.")
 
-    if resp == 1:
+    if resp == '1':
         add_cards(deck)
         save = input("Save changes: ")
         if save == 'y':
             # handle = input("File name: ")
             write_deck(deck, handle)
-    elif resp == 2:
+    elif resp == '2':
         edit_deck(deck, handle)
         save = input("Save changes: ")
         if save == 'y':
             write_deck(deck, handle)
-    elif resp == 3:
+    elif resp == '4':
+        print("Number of cards in deck:", len(deck))
+        cards = None
+
+        while cards is None:
+            print("How many cards would you like to study?")
+            num_cards = input()
+
+            try:
+                num_cards = int(num_cards)
+                if num_cards <= 0:
+                    print(f"{num_cards} is not positive.")
+                elif num_cards >= len(deck):
+                    print(f"{num_cards} exceeds the size of the deck.")
+                else:
+                    cards = deck[0:num_cards]
+            except ValueError:
+                print("Please input an integer.")
+
+        review_deck(cards)
+    elif resp == '3':
         study_deck(deck)
-    elif resp == 4:
-        review_deck(deck)
