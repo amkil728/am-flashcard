@@ -35,6 +35,13 @@ def review_deck(deck):
             break
 
 
+def study_deck(deck):
+    for card in deck:
+        print(card['front'])
+        input('Reveal')
+        print(card['back'])
+
+
 def add_cards(deck):
     while True:
         front = input('Front: ')
@@ -79,33 +86,42 @@ def edit_deck(deck, handle):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 2:
-        mode, handle = sys.argv[1], sys.argv[2]
-    elif len(sys.argv) == 2:
-        mode = '-r'
-        handle = sys.argv[1]
-    else:
-        print("argument missing: file name")
-        sys.exit(1)
-
-    # TODO: exception handling
-    deck = read_deck(handle)
+    handle = input("Name of deck file: ")
     
-    if mode == '-a':
+    # TODO: exception handling
+    try:
+        deck = read_deck(handle)
+    except FileNotFoundError:
+        print("File with name", handle, "not found. Please enter a valid filename.")
+    except UnicodeDecodeError:
+        print(f"Could not read {handle}. Please enter a plaintext file")
+
+
+    print("Select an option:")
+    print("1. Add cards to deck.")
+    print("2. Edit deck.")
+    print("3. Study deck.")
+    print("4. Revise deck.")
+
+    while True:
+        resp = input()
+        if resp in [1,2,3,4]:
+            break
+        else:
+            print("Please select a valid option.")
+
+    if resp == 1:
         add_cards(deck)
         save = input("Save changes: ")
         if save == 'y':
             # handle = input("File name: ")
             write_deck(deck, handle)
-    elif mode == '-r':
-        review_deck(deck)
-    elif mode == '-v':
-        show_deck(deck)
-    elif mode == '-e':
+    elif resp == 2:
         edit_deck(deck, handle)
         save = input("Save changes: ")
         if save == 'y':
             write_deck(deck, handle)
-    else:
-        print("command line argument", mode, "not recognised")
-        sys.exit(0)
+    elif resp == 3:
+        study_deck(deck)
+    elif resp == 4:
+        review_deck(deck)

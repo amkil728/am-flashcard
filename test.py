@@ -30,11 +30,11 @@ def test_read(handle, deck):
         assert deck_read == deck
     except AssertionError:
         print("expected:")
-        for k, v in deck:
-            print(k, v)
+        for card in deck:
+            print(card['front'], card['back'])
         print("received:")
-        for k, v in deck_read:
-            print(k, v)
+        for card in deck_read:
+            print(card['front'], card['back'])
     
 
 def test_deck_contains(deck, card):
@@ -58,6 +58,8 @@ old
 
     HANDLE = 'test_file'
 
+    print(test_deck)
+
     # test_write(test_deck, HANDLE, test_str)
-    # test_read(HANDLE, test_deck)
-    test_deck_contains(test_deck, test_deck[0])
+    test_read(HANDLE, test_deck)
+    # test_deck_contains(test_deck, test_deck[0])
